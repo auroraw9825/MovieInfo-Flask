@@ -1,0 +1,934 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Movie DB</title>
+    <meta charset="utf-8" />
+    <style>
+        body {
+            background: black no-repeat;
+            font-family: "Times New Roman", Times, serif;
+        }
+        #titleDiv{
+            height: 20px;
+            width: 100%;
+            background: -webkit-linear-gradient(left, black, darkred);
+          /*  background-image: -webkit-gradient(radial, 50% 0, 150, 50% 0, 300, from(#444), to(#111));*/
+        }
+        div.leftTab{
+            height: 50px;
+            width: 130px;
+            float:right;
+            text-align: center;
+            padding-top: 15px;
+            border-width: 0 0 1px 0; 
+            border-color: silver;
+            border-style:solid;
+        }
+        div.leftTabClicked{
+            height: 50px;
+            width: 130px;
+            float:right;
+            text-align: center;
+            padding-top: 15px;
+            border-width: 0 0 0 0; 
+            border-color: silver;
+            border-style:solid;
+        }
+        div.leftTab2{
+            height: 50px;
+            width: 130px;
+            float:right;
+            text-align: center;
+            padding-top: 0;
+            border-width: 0 0 0 0; 
+            border-color: silver;
+            border-style:solid;
+        }
+        div.leftTab2Clicked{
+            height: 50px;
+            width: 130px;
+            float:right;
+            text-align: center;
+            padding-top: 0;
+            border-width: 0 0 1px 0; 
+            border-color: silver;
+            border-style:solid;
+        }
+        h1 {
+            font-size: 24px;
+            color: darkred;
+            text-align: left;
+            margin: 2px;
+            padding: 2px;
+        }
+
+        h2 {
+            font-size: 22px;
+            text-align: center;
+            color: silver;
+        }
+
+        h3 {
+            font-size: 20px;
+            text-align: center;
+            color: silver;
+        }
+
+        .button1{
+            font-size: 16px;
+            color: silver;
+            background-color: black;
+            border-color: black;
+            text-decoration: none;
+            border:none;
+            cursor:pointer;
+        }
+/*        .button1:focus {
+          outline:none;
+          box-shadow: none;
+        }
+        .button1:active {
+          outline:none;
+          box-shadow: none;
+        }*/
+        .button1:hover {
+            color: darkred;
+            text-decoration: none;
+        }
+        .button1clicked{
+            font-size: 16px;
+            color: darkred;
+            background-color: black;
+            border-color: black;
+            text-decoration: none;
+            border:none;
+            cursor:pointer;
+        }
+        .button1clicked:hover {
+            color: darkred;
+            text-decoration: none;
+        }
+
+        ul {
+                list-style: none; /* 让每行前面的点没了*/
+            }
+        li.show1 { /*让6张图片重合到一起，不是上下排列*/
+            position: absolute;
+            left: 400px;
+            top: 140px;
+            width: 780px;
+            height: 500px;
+        }
+        li.show2 { /*让6张图片重合到一起，不是上下排列*/
+            position: absolute;
+            left: 400px;
+            top: 740px;
+            width: 780px;
+            height: 500px;
+        }
+        .container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .container .content {
+            position: absolute;
+            bottom: 0;
+            background: rgb(0, 0, 0); /* Fallback color */
+            background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
+            color: #f1f1f1;
+            width: 100%;
+            padding: 30px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .button2{
+            background-color: black;
+            color: white;
+            border-color: black;
+            border:none;
+        }
+        .button2:hover{
+            background-color: red;
+        }
+
+        .modal{
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+        .modal-content {/* the pop up window*/
+            position: relative;
+            background-color: silver;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 850px;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+        /* The Close Button */
+        .close {
+          color: white;
+          float: right;
+          font-size: 20px;
+          font-weight: bold;
+          padding-right: 5px;
+        }
+        .close:hover,
+        .close:focus {
+          color: #000;
+          text-decoration: none;
+          cursor: pointer;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div style="width:100%; height: 50px; ">
+        <div style="width:70%; height: 50px; float:left;" ><h1>THE MOVIE DB</h1></div>
+        <div id="titleDiv" style="width:25%; height: 35px; margin-top: 8px; float:right;"></div>
+    </div>
+
+    <div id="bigContainer" style="width:100%; height: 1350px;">
+        <div id="leftBar" style="width:20%; height: 1350px; float:left;  border-width: 0 1px 0 0; border-color: silver;border-style:solid;">
+            <div class="leftTab" id="leftHome"><div class="button1" id="Home">Home &nbsp;&nbsp;&#10230; </div></div>
+            <div class="leftTab2" id="leftSearch" style="position: relative; top: 80px; left: 130px;"><div class="button1" id="Search">Search &nbsp;&nbsp;&#10230;</div></div>
+        </div><!--  the left navigation bar -->
+
+        <!--    the right image slide show -->
+        <div id="HomeDiv" style="width:79%; height: 1350px; float:right;">
+            <h2 style="position: absolute; left: 700px; top: 80px; font-weight: none;">Trending Movies</h2>
+            <!-- <div id="trending" style="border: solid purple 2px; width:780px; height: 500px;"></div> -->
+            <ul id="banner">
+                <li class = "show1">
+                    <div class =  "container">
+                        <img id = "img1" src="https://bytes.usc.edu/cs571/s21_JSwasm00/hw/HW6/imgs/movie-placeholder.jpg">
+                        <div class="content" id ="text1"></div>
+                    </div>
+                </li>
+                <li class = "show1">
+                    <div class =  "container">
+                        <img id = "img2" src="https://bytes.usc.edu/cs571/s21_JSwasm00/hw/HW6/imgs/movie-placeholder.jpg">
+                        <div class="content" id ="text2"></div>
+                    </div>
+                </li>
+                <li class = "show1">
+                    <div class =  "container">
+                        <img id = "img3" src="https://bytes.usc.edu/cs571/s21_JSwasm00/hw/HW6/imgs/movie-placeholder.jpg">
+                        <div class="content" id ="text3"></div>
+                    </div>
+                </li>
+                <li class = "show1">
+                    <div class =  "container">
+                        <img id = "img4" src="https://bytes.usc.edu/cs571/s21_JSwasm00/hw/HW6/imgs/movie-placeholder.jpg">
+                        <div class="content" id ="text4"></div>
+                    </div>
+                </li>
+                <li class = "show1">
+                    <div class =  "container">
+                        <img id = "img5" src="https://bytes.usc.edu/cs571/s21_JSwasm00/hw/HW6/imgs/movie-placeholder.jpg">
+                        <div class="content" id ="text5"></div>
+                    </div>
+                </li>
+            </ul>
+
+            <h2 style="position: absolute; left: 700px; top: 680px; font-weight: none;">TV Shows On-Air Today</h2>
+            <ul id="banner2">
+                <li class = "show2">
+                    <div class =  "container">
+                        <img id = "img6" src="https://bytes.usc.edu/cs571/s21_JSwasm00/hw/HW6/imgs/movie-placeholder.jpg">
+                        <div class="content" id ="text6"></div>
+                    </div>
+                </li>
+                <li class = "show2">
+                    <div class =  "container">
+                        <img id = "img7" src="https://bytes.usc.edu/cs571/s21_JSwasm00/hw/HW6/imgs/movie-placeholder.jpg">
+                        <div class="content" id ="text7"></div>
+                    </div>
+                </li>
+                <li class = "show2">
+                    <div class =  "container"><img id = "img8" src="https://bytes.usc.edu/cs571/s21_JSwasm00/hw/HW6/imgs/movie-placeholder.jpg">
+                    <div class="content" id ="text8"></div></li>
+                <li class = "show2">
+                    <div class =  "container">
+                        <img id = "img9" src="https://bytes.usc.edu/cs571/s21_JSwasm00/hw/HW6/imgs/movie-placeholder.jpg">
+                        <div class="content" id ="text9"></div>
+                    </div>
+                </li>
+                <li class = "show2">
+                    <div class =  "container">
+                        <img id = "img10" src="https://bytes.usc.edu/cs571/s21_JSwasm00/hw/HW6/imgs/movie-placeholder.jpg">
+                        <div class="content" id ="text10"></div>
+                    </div>
+                </li>
+            </ul>
+
+            <!-- add the footer -->
+            <div style=" width: 78%; height: 65px; background-color: darkred; position: absolute; top: 1345px; ">    
+                <p style="color: silver; text-align:right; padding-top: 0px; font-style:italic;">Designed and developed by Rong Wang &nbsp;&nbsp; <br> Powered by TMDB &nbsp;&nbsp; </p>
+            </div>
+
+        </div> <!-- the right sliding show -->
+    </div>
+
+
+    <!--    the search bar -->
+    <div id = "SearchDiv" style="visibility: hidden; width:65%; height: 750px; position: absolute; left: 300px; top: 60px; margin-top: 0px; padding: 0px;">
+        <div id = "SearchBar_top" style="width:width:65%; height: 300px; background: -webkit-linear-gradient(bottom, black, darkred); position: relative; top: 0px;"> <!-- width=900px at first -->
+            <br>
+            <p style="color: white; text-align: center; font-weight: bold; font-size: 20px; margin-top:0px;"> Search</p>
+            <form id="myForm" style="position: absolute; left: 220px; top: 80px;"> <!-- action="/     " -->
+                <label for="keyword"><span style="color: white;">Keyword<span style="color:red"> *</span></span></label>
+                <input type="text" id="keyword" size="50"><br><br>
+                <label for="category"><span style="color: white;">Category<span style="color:red"> *</span></span></label>
+                <select id="category">
+                    <option selected> </option>
+                    <option> Movies</option>
+                    <option> TV shows</option>
+                    <option> Movies and TV shows</option>
+                </select><BR><BR>
+                <input type="button" class ="button2" value="Search" onclick="searching()" style="position: absolute; left:130px; width: 60px; height: 30px;">
+                <input type="Reset" class = "button2" value="Clear" id = "clearButton" style="position: absolute; left:230px; width: 60px; height: 30px;" >
+            </form>
+        </div>
+        <!-- show the result -->
+        <div id = "ResultDiv" style=" width:900px; height: 350px; background-color: black">
+        </div>
+
+        <!-- the footer -->
+        <div  id="footer_in_searchDiv" style=" width: 120%; height: 65px; background-color: darkred; position: absolute; top: 650px; ">    
+            <p style="color: silver; text-align:right; padding-top: 0px; font-style:italic;">Designed and developed by Rong Wang &nbsp;&nbsp; <br> Powered by TMDB &nbsp;&nbsp; </p>
+        </div>
+    </div>
+
+    
+
+   <!--  modal HTML -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content" id="myModalContent">
+            <span class="close" id = "span">&times;</span>
+            <img id="modalImg" src = "https://bytes.usc.edu/cs571/s21_JSwasm00/hw/HW6/imgs/movie-placeholder.jpg" style = "padding: 20px 20px 0 30px;">
+           
+            <span style="padding-left: 30px;">
+                <span id="movieName" style = "font-size: 20px; color: black;"></span>
+                <a id = "info_icon" target="_blank" style="color:red; font-size: 10px; text-decoration:none;">&#9432;</a>
+            </span><br><br>
+            <!--  movie year and genre -->
+            <span id="movieYear" style = "font-size: 14px; color: black; padding-left: 30px;"></span><br>
+            <span style="padding-left: 30px;">
+                <span id="movieRating" style = "font-size: 10px; color: red; font-family: serif;"></span>
+                <span id="movieVotes" style = "font-size: 10px; color: black;"></span>
+            </span><br><br>
+            <p id="movieOverview" style = "font-size: 16px; color: black; padding-left: 30px; padding-right: 30px;"></p>
+            <p id="lang" style = "font-size: 13px; color: black; padding-left: 30px; font-weight: bold; font-style: italic;">Spoken languages: </p>
+            <br><br>
+            <p style="font-weight: bold; padding-left: 30px"> Cast</p>
+            <div id="outerAct" style="width: 850px; height: auto; ">
+                <div id="act" style="position: absolute; left: 30px; width: 820px; "></div>
+            </div><!--  actors pictures -->
+            <p id = "textReviews" style="font-weight: bold; padding-left: 30px"> Reviews</p>
+            <div id="outerReviews" style="width: 850px; height: auto; background-color: silver;">
+                <div id="reviews" style="position: absolute; left: 30px; width: 820px; background-color: silver;"></div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        document.getElementById("Home").className = "button1clicked"; // change the Home button to red
+        document.getElementById("Home").onclick = showHome;
+        document.getElementById("Search").onclick = showSearch;
+        window.onload = displayTrending;
+        document.getElementById("clearButton").onclick=function(){
+            clearResult();
+            document.getElementById("bigContainer").style.height='712px';
+            document.getElementById("leftBar").style.height='712px'; //change to height because of the right white border
+            document.getElementById("footer_in_searchDiv").style.top = "650px";
+            document.getElementById("ResultDiv").style.height='350px';
+        };
+
+        function showHome(){
+            document.getElementById("leftHome").className = "leftTab";
+            document.getElementById("leftSearch").className = "leftTab2";
+            document.getElementById("HomeDiv").style.visibility='visible';
+            document.getElementById("SearchDiv").style.visibility='hidden';
+            // document.getElementById("Home").style.color = "darkred";
+            document.getElementById("Home").className = "button1clicked"; 
+            document.getElementById("Search").className = "button1";
+            clearResult();
+            document.getElementById("bigContainer").style.height='1350px';
+            document.getElementById("leftBar").style.height='1350px'; //change to height because of the right white border
+            document.getElementById("SearchDiv").style.height='350px';
+            document.getElementById("footer_in_searchDiv").style.top = "650px";
+            // clear the results in the result div.
+            clearResult();
+            // clear the form input, (keyword and category)
+            document.getElementById("myForm").reset();  
+        }
+        function showSearch(){
+            document.getElementById("leftHome").className = "leftTabClicked";
+            document.getElementById("leftSearch").className = "leftTab2Clicked";
+            document.getElementById("HomeDiv").style.visibility='hidden';
+            document.getElementById("SearchDiv").style.visibility='visible';
+            document.getElementById("Home").className = "button1";
+            document.getElementById("Search").className = "button1clicked";
+            document.getElementById("bigContainer").style.height='712px';
+            document.getElementById("leftBar").style.height='712px'; //change to height because of the right white border
+            document.getElementById("footer_in_searchDiv").style.top = "650px";
+            document.getElementById("ResultDiv").style.height='350px';
+        }
+
+
+        function displayTrending(){ // display trending and tv on air slide shows
+            var xhttp = new XMLHttpRequest();
+            // when receive the response
+            xhttp.onreadystatechange = function() {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    var trendingArr = JSON.parse(xhttp.responseText);
+                    document.getElementById('img1').src = "https://image.tmdb.org/t/p/w780/" + trendingArr["0"]["backdrop_path"];
+                    document.getElementById("img2").src = "https://image.tmdb.org/t/p/w780/" + trendingArr["1"]["backdrop_path"];
+                    document.getElementById("img3").src = "https://image.tmdb.org/t/p/w780/" + trendingArr["2"]["backdrop_path"];
+                    document.getElementById("img4").src = "https://image.tmdb.org/t/p/w780/" + trendingArr["3"]["backdrop_path"];
+                    document.getElementById("img5").src = "https://image.tmdb.org/t/p/w780/" + trendingArr["4"]["backdrop_path"];
+                    document.getElementById("text1").innerHTML=trendingArr["0"]["title"]+" ("+trendingArr["0"]["release_year"]+")";
+                    document.getElementById("text2").innerHTML=trendingArr["1"]["title"]+" ("+trendingArr["1"]["release_year"]+")";
+                    document.getElementById("text3").innerHTML=trendingArr["2"]["title"]+" ("+trendingArr["2"]["release_year"]+")";
+                    document.getElementById("text4").innerHTML=trendingArr["3"]["title"]+" ("+trendingArr["3"]["release_year"]+")";
+                    document.getElementById("text5").innerHTML=trendingArr["4"]["title"]+" ("+trendingArr["4"]["release_year"]+")";
+                    displayImage(document.getElementById('banner'));
+
+                    // displayImage(trendingArr);
+                     // for (i=0; i<5; i++){
+                    //     // document.write("hello!");
+                    //     var list = document.createElement("li");
+                    //     var imgSlide = document.createElement("img");
+                    //     imgSlide.src = "https://image.tmdb.org/t/p/w780/" + trendingArr[i][1];
+                    //     imgSlide.width = '780px';
+                    //     list.appendChild(imgSlide);
+                    //     ul.appendChild(list);
+                    // document.getElementById('trending').innerHTML = trendingArr[0][0];
+                    // }  
+                }
+            };
+            xhttp.open("GET", "https://rongmovieapp.azurewebsites.net/trendingMovie", true);
+            xhttp.send();
+
+            var xhttp2 = new XMLHttpRequest();
+            xhttp2.onreadystatechange = function() {
+                if (xhttp2.readyState == 4 && xhttp2.status == 200) {
+                    var onAirArr = JSON.parse(xhttp2.responseText);
+                    document.getElementById('img6').src = "https://image.tmdb.org/t/p/w780/" + onAirArr["0"]["backdrop_path"];
+                    document.getElementById("img7").src = "https://image.tmdb.org/t/p/w780/" + onAirArr["1"]["backdrop_path"];
+                    document.getElementById("img8").src = "https://image.tmdb.org/t/p/w780/" + onAirArr["2"]["backdrop_path"];
+                    document.getElementById("img9").src = "https://image.tmdb.org/t/p/w780/" + onAirArr["3"]["backdrop_path"];
+                    document.getElementById("img10").src = "https://image.tmdb.org/t/p/w780/" + onAirArr["4"]["backdrop_path"];
+                    document.getElementById("text6").innerHTML=onAirArr["0"]["name"]+" ("+onAirArr["0"]["first_air_date"]+")";
+                    document.getElementById("text7").innerHTML=onAirArr["1"]["name"]+" ("+onAirArr["1"]["first_air_date"]+")";
+                    document.getElementById("text8").innerHTML=onAirArr["2"]["name"]+" ("+onAirArr["2"]["first_air_date"]+")";
+                    document.getElementById("text9").innerHTML=onAirArr["3"]["name"]+" ("+onAirArr["3"]["first_air_date"]+")";
+                    document.getElementById("text10").innerHTML=onAirArr["4"]["name"]+" ("+onAirArr["4"]["first_air_date"]+")";
+                    displayImage(document.getElementById('banner2'));
+                }
+            };
+            xhttp2.open("GET", "https://rongmovieapp.azurewebsites.net/TVonAir", true);
+            xhttp2.send();
+        }
+
+        function displayImage(obj1){ //var obj1 = document.getElementById('banner');
+            var li = obj1.getElementsByTagName('li');
+            var j = 0; //当前图片索引
+            var iIndex = 1;
+            var timer;
+            for(var i = 0; i < li.length; i++){ //初始化
+                if (i==j){
+                    li[i].style.opacity = '1'; // 当前显示的图片设成完全不透明的
+                    continue;
+                }
+                li[i].style.opacity = '0'; //其他的图片都是完全透明的，这样渐变的时候不会显现出来
+            }
+            function startRoll(){ // 写一个函数，让每过一段时间，最下边的图片就是会放到最上边来
+                var last=j;
+                j++;
+                if (j >= li.length){
+                    j = 0;
+                }
+                li[j].style.zIndex = iIndex;
+                iIndex++;
+                fadeIn(li[j], 2, last);
+            };
+            
+            function fadeIn(obj, period, last){ //是每张图片渐变地消失，渐变地出现
+                var COUNT = 50;
+                clearInterval(obj.timer);
+                li[last].style.opacity = '0';
+                obj.timer = setInterval(function(){
+                    var opacityValue = Number.parseFloat(obj.style.opacity);
+                    opacityValue += period/COUNT;
+                    if (opacityValue < 1){
+                        obj.style.opacity = opacityValue;
+                    }
+                    else{
+                        obj.style.opacity = 1;
+                        clearInterval(obj.timer);
+                        for(var i = 0; i < li.length; i++){
+                            if (i==j){
+                                li[i].style.opacity = '1';
+                                continue;
+                            }
+                            li[i].style.opacity = '0';
+                        }
+                    }
+                }, 2000/COUNT)  
+            }
+            setInterval(startRoll,6000); // 每过4000ms调用一次f，换一张照片
+        }
+
+
+        function searching(){
+            // first delete  all results fromt the last time
+            clearResult();
+
+            var inputKeyword = document.getElementById("keyword").value;
+            var inputCategory = document.getElementById("category").value;
+            if (inputKeyword == "" || inputCategory == ""){
+                alert("Please enter valid values.");
+            }
+            else{
+                if(inputCategory == "Movies"){
+                    var xhttp3 = new XMLHttpRequest();
+                    xhttp3.onreadystatechange = function() {
+                        if (xhttp3.readyState == 4 && xhttp3.status == 200) {
+                            displayResults(xhttp3, "movie");
+                        }
+                    };
+                    xhttp3.open("GET", "https://rongmovieapp.azurewebsites.net/searchMovie?keyword=" + inputKeyword, true);
+                    xhttp3.send();
+                }
+
+                else if(inputCategory == "TV shows"){
+                    var xhttp3 = new XMLHttpRequest();
+                    xhttp3.onreadystatechange = function() {
+                        if (xhttp3.readyState == 4 && xhttp3.status == 200) {
+                            displayResults(xhttp3, "tv");
+                        }
+                    };
+                    xhttp3.open("GET", "https://rongmovieapp.azurewebsites.net/searchTV?keyword=" + inputKeyword, true);
+                    xhttp3.send();
+                }
+                else if(inputCategory == "Movies and TV shows"){
+                    var xhttp3 = new XMLHttpRequest();
+                    xhttp3.onreadystatechange = function() {
+                        if (xhttp3.readyState == 4 && xhttp3.status == 200) {
+                            displayResults(xhttp3, "multi");
+                        }
+                    };
+                    xhttp3.open("GET", "https://rongmovieapp.azurewebsites.net/multiSearch?keyword=" + inputKeyword, true);
+                    xhttp3.send();
+                }
+            }
+            
+        }
+
+        function clearResult(){
+            var parent = document.getElementById("ResultDiv");
+            while (parent.lastElementChild) { // keep looping to remove every child
+                parent.removeChild(parent.lastElementChild);
+            }
+            document.getElementById("ResultDiv").style.height = "350px";
+        }
+        function displayResults(xhttp3, media_type){
+            // empty repsonse, found nothing, show no result found.
+            if(xhttp3.responseText == "{}"){ 
+            // document.write(xhttp3.responseText);
+                var noResult = document.createElement("p");
+                noResult.innerHTML = "No results found.";
+                noResult.style = "color:white; text-align: center;";
+                var searchSection = document.getElementById("ResultDiv");
+                searchSection.appendChild(noResult);
+            }
+            else{
+                var p1 = document.createElement("p");
+                p1.innerHTML = "Showing results...";
+                p1.style.color = "white";
+                var resultSession = document.getElementById("ResultDiv");
+                resultSession.appendChild(p1);
+                var searchedMovie = JSON.parse(xhttp3.responseText);
+                var countM = Object.keys(searchedMovie).length;
+                var changedH = countM*330+ 400;
+                document.getElementById("bigContainer").style.height=changedH + 'px';
+                document.getElementById("leftBar").style.height=changedH + 'px';
+                document.getElementById("footer_in_searchDiv").style.top=(changedH-60)+"px";
+
+
+                for( x in searchedMovie){ // x here is the index of each movie 0 1 2...
+                    // console.log("value of x: " + x);
+                    var m_type = searchedMovie[x]["media_type"];
+                    // console.log("1: "+m_type);
+                    var res = document.createElement("div");
+                    res.style = "border-width: 0 0 0 4px; border-color: red; border-style:solid; width: 880px; height: 300px; padding: 2px;";
+                    var small_img = document.createElement('img');
+                    if(searchedMovie[x]["poster_path"] == null){ // ?
+                        small_img.src = "https://cinemaone.net/images/movie_placeholder.png";
+                    }
+                    else{
+                        small_img.src = "https://image.tmdb.org/t/p/w185/" + searchedMovie[x]["poster_path"];
+                    }
+                    res.appendChild(small_img);
+                    small_img.style = "padding:10px;";
+                    
+                    var title = document.createElement("p");
+                    title.innerHTML = searchedMovie[x]["title"];
+                    res.appendChild(title);
+                    title.style = "color: white; font-size: 22px; font-weight:bold; position: relative; left: 215px; top: -300px;";
+
+                    var year = document.createElement("p");
+                    if(searchedMovie[x]["release_date"]!=null){
+                        year.innerHTML = searchedMovie[x]["release_date"].substring(0, 4) + " | " +searchedMovie[x]["genre_str"];
+                    }
+                    else{
+                        year.innerHTML = "N/A" + " | ";
+                    }
+                    res.appendChild(year);
+                    year.style = "color:white; font-size:13px;position: relative; left: 215px; top:-313px;"; 
+
+                    var star = document.createElement("span");
+                    star.innerHTML = "&#9733;"
+                    star.style = "color: red; font-size:10px; position: relative; left: 215px; top: -328px;";
+                    res.appendChild(star);
+                    var vote_average = document.createElement("span");
+                    vote_average.innerHTML = searchedMovie[x]["vote_average"]/2 + "/5";
+                    res.appendChild(vote_average);
+                    vote_average.style = "color: darkred; font-size:10px; position: relative; left: 217px; top: -328px;";
+
+                    var vote_count = document.createElement("span");
+                    vote_count.innerHTML = searchedMovie[x]["vote_count"] + " votes";
+                    res.appendChild(vote_count);
+                    vote_count.style = "color: white; font-size:13px; position: relative; left: 225px; top: -330px;";
+
+                    var overview = document.createElement("div");
+                    overview.innerHTML = searchedMovie[x]["overview"];
+                    res.appendChild(overview);
+                    // only show three lines, use ellipsis.
+                    overview.style = "color:white;font-size:10px; text-overflow: ellipsis; display: -webkit-box;max-width: 675px;-webkit-line-clamp: 3; -webkit-box-orient: vertical;overflow: hidden; position: relative; left: 215px; top: -310px"; //height: 55px;
+
+                    // show more button
+                    var btn = document.createElement("button");
+                    btn.innerHTML = "Show more";
+                    btn.style = "background-color: darkred; color: white; width: 80px; height: 30px; border:none; position: relative; left: 215px; top: -295px;"
+                    // btn.value = searchedMovie[x]["id"];
+                    var movieId = searchedMovie[x]["id"];
+                    // btn.addEventListener("click", function()
+                    if(searchedMovie[x]["release_date"]!=null){
+                        release_y = searchedMovie[x]["release_date"].substring(0, 4);
+                    }
+                    else{
+                        release_y = "N/A";
+                    }
+                    // console.log("2: "+m_type);
+                    btn.onclick = popUp(movieId, searchedMovie[x]["title"], release_y, searchedMovie[x]["vote_count"] ,searchedMovie[x]["vote_average"], searchedMovie[x]["overview"], m_type, searchedMovie[x]["genres"]);
+                    function popUp(movieId, title, year, vote_count ,vote_average, movie_overview, m_type, genres){
+                        // console.log(movieId);
+                        return function(){
+                            // console.log("3: "+m_type);
+                            var myModal = document.getElementById("myModal");
+                            var myModalContent = document.getElementById("myModalContent");
+                            // fill in all the content
+                            var xhttp4 = new XMLHttpRequest();
+                            xhttp4.onreadystatechange = function() {
+                                if (xhttp4.readyState == 4 && xhttp4.status == 200) {
+                                    // console.log("got a response!");
+                                    var movieDetails = JSON.parse(xhttp4.responseText);
+                                    var movieImg = document.getElementById("modalImg");
+                                    if(movieDetails["backdrop_path"] != null){ // ?
+                                        movieImg.src = "https://image.tmdb.org/t/p/w780/" + movieDetails["backdrop_path"]; 
+                                    }
+                                    else{
+                                        movieImg.src = "https://bytes.usc.edu/cs571/s21_JSwasm00/hw/HW6/imgs/movie-placeholder.jpg";
+                                    }
+                                    var mName = document.getElementById("movieName");
+                                    mName.innerHTML = title + " ";
+                                    var info = document.getElementById("info_icon");
+                                    if(media_type == "movie"){
+                                        info.href = "https://www.themoviedb.org/movie/" + movieId;
+                                    }
+                                    else if(media_type=="tv"){
+                                        info.href = "https://www.themoviedb.org/tv/" + movieId;
+                                    }
+                                    else{ // for  multi search
+                                        if(m_type == "movie"){
+                                            info.href = "https://www.themoviedb.org/movie/" + movieId;
+                                        }
+                                        else{
+                                            info.href = "https://www.themoviedb.org/tv/" + movieId;
+                                        }
+                                    }
+                                    
+                                    var mYear = document.getElementById("movieYear");
+                                    mYear.innerHTML = year + " | " + movieDetails["genres"]; 
+                                    // console.log( movieDetails["genres"]);
+                                    var mRating = document.getElementById("movieRating");
+                                    mRating.innerHTML = "&#9733;" + vote_average/2 + "/5";
+                                    var mVotes = document.getElementById("movieVotes");
+                                    mVotes.innerHTML = vote_count + " votes";
+                                    var mOverview = document.getElementById("movieOverview");
+                                    mOverview.innerHTML = movie_overview;
+                                    document.getElementById("lang").innerHTML = "Spoken Languages: " + movieDetails["spoken_languages"];
+                                    
+                                    // remove all elements in teh actDiv
+                                    var actDiv = document.getElementById("act");
+                                    var outerAct = document.getElementById("outerAct");
+                                    //document.createElement("div");
+                                    //myModalContent.appendChild(actDiv);
+                                    
+                                    while (actDiv.lastElementChild) { // keep looping to remove every child
+                                        actDiv.removeChild(actDiv.lastElementChild);
+                                    }
+                                    actDiv.innerHTML = ""; // clear the N/A if the last movie doesn't have a cast.
+                                    // fill in actors
+                                    actors = movieDetails["cast"];
+                                    var countKey = Object.keys(actors).length;
+                                    if(countKey > 0 && countKey<=4){
+                                        actDiv.style.height = "380px";
+                                        outerAct.style.height = "380px";
+                                    }
+                                    else if (countKey > 4 && countKey<=8){
+                                        actDiv.style.height = "760px";
+                                        outerAct.style.height = "760px";
+                                    }
+                                    else if(countKey == 0){
+                                        actDiv.innerHTML = "N/A";
+                                        actDiv.style.height = "50px";
+                                        outerAct.style.height = "50px";
+                                    }
+
+                                    for (i in actors){
+                                        var people =  document.createElement("div");
+                                        people.style="width: 200px; height:360px; float:left; "
+                                        var peopleImg = document.createElement("img");
+                                        if (actors[i]["profile_path"] != null){
+                                            peopleImg.src = "https://image.tmdb.org/t/p/w185/"+actors[i]["profile_path"];
+                                        }   
+                                        else{
+                                            peopleImg.src = "https://bytes.usc.edu/cs571/s21_JSwasm00/hw/HW6/imgs/person-placeholder.png";
+                                        }
+                                        people.appendChild(peopleImg);
+                                        var peopleName = document.createElement("div");
+                                        peopleName.innerHTML = actors[i]["name"];
+                                        peopleName.style = "color: black; font-weight: bold; font-size:15px; text-align:center;text-overflow: ellipsis; display: -webkit-box;max-width: 675px;-webkit-line-clamp: 1; -webkit-box-orient: vertical;overflow: hidden;"
+                                        people.appendChild(peopleName);
+                                        var s = document.createElement("p");
+                                        s.style = "font-size: 15px; text-align:center; margin:0";
+                                        s.innerHTML = "AS";
+                                        people.appendChild(s);
+                                        var charName = document.createElement("div");
+                                        charName.style = "color: black; font-size:15px; text-align:center;text-overflow: ellipsis; display: -webkit-box;max-width: 675px;-webkit-line-clamp: 1; -webkit-box-orient: vertical;overflow: hidden;"
+                                        people.appendChild(charName);
+                                        charName.innerHTML = actors[i]["character"];
+                                        actDiv.appendChild(people);
+                                    }
+
+
+                                    var reviewDiv = document.getElementById("reviews");
+                                    var outerReviewDiv = document.getElementById("outerReviews");
+                                    while (reviewDiv.lastElementChild) { // keep looping to remove every child
+                                        reviewDiv.removeChild(reviewDiv.lastElementChild);
+                                    }
+                                    reviewDiv.innerHTML = ""; // clear if the last search review is N/A.
+                                    reviews = movieDetails["reviews"];
+                                    var countRev = Object.keys(reviews).length;
+                                    var h = (countRev+1)*130;
+                                    reviewDiv.style.height = h+"px";
+                                    outerReviewDiv.style.height = h+"px";
+                                    var textR = document.getElementById("textReviews");
+                                    textR.style.top = 0;
+                                    if(countRev == 0){
+                                        // reviewDiv.innerHTML = "N/A";
+                                        // reviewDiv.style.height = "20px";
+                                        // outerReviewDiv.style.height = "20px";
+                                        // textR.style.position = "relative";
+                                        // textR.style.top="-100px";
+                                        // var aDH = actDiv.style.height+100;
+                                        // var oaDH = outerAct.style.height+100;
+                                        // actDiv.style.height = aDH+"px";
+                                        // outerAct.style.height = oaDH+"px";
+                                        var na =  document.createElement("div");
+                                        na.style = "height:130px; background-color:silver;";
+                                        na.innerHTML = "N/A";
+                                        reviewDiv.appendChild(na);
+                                    }
+                                    
+                                    for(i in reviews){
+                                        var rev =  document.createElement("div");
+                                        reviewDiv.appendChild(rev);
+                                        var user = document.createElement("span");
+                                        user.innerHTML = reviews[i]["username"];
+                                        user.style="font-weight:bold; font-size:14px; font-weight:bold;"
+                                        var review_date = document.createElement("span");
+                                        review_date.innerHTML = " on " + reviews[i]["created_at"];
+                                        review_date.style="font-size:10px; font-style: italic";
+                                        var holder = document.createElement("p");
+                                        holder.appendChild(user);
+                                        holder.appendChild(review_date);
+                                        rev.appendChild(holder);
+                                        // console.log(reviews[i]["rating"]);
+                                        if(reviews[i]["rating"] != null){ // if has a rating
+                                            rev_rate = document.createElement("span");
+                                            rev_rate.innerHTML = "&#9733; " + reviews[i]["rating"]/2 + "/5";
+                                            rev_rate.style="font-size:9px; color: red;";
+                                            rev.appendChild(rev_rate);
+                                        }
+                                        var rev_content = document.createElement("div");
+                                        rev_content.innerHTML =reviews[i]["content"];
+                                        rev_content.style="color: black; font-size:13px;text-overflow: ellipsis; display: -webkit-box;max-width: 790px;-webkit-line-clamp: 3; -webkit-box-orient: vertical;overflow: hidden; ";
+                                        rev.appendChild(rev_content);
+                                        var shortbar = document.createElement("div");
+                                        shortbar.style="width: 590px; height: 1px; background-color: gray; position: absolute; left: 100px; margin-top:5px;";
+                                        rev.appendChild(shortbar);
+                                        var b = document.createElement("br");
+                                        rev.appendChild(b);
+                                    }
+
+                                    myModal.style.display = "block";
+                                    
+                                }
+                            }; 
+                            if (media_type == "multi"){ // m_type need to be passed through the  onclick=function(), otherwise will only have the last result's media type
+                                // media_type = m_type; // tv or movie
+                                if (m_type == "movie"){
+                                    xhttp4.open("GET", "https://rongmovieapp.azurewebsites.net/movieDetails?keyword=" + movieId, true);
+                                }
+                                else{
+                                    xhttp4.open("GET", "https://rongmovieapp.azurewebsites.net/tvDetails?keyword=" + movieId, true);
+                                }
+                            }
+                            else if (media_type == "movie"){
+                                xhttp4.open("GET", "https://rongmovieapp.azurewebsites.net/movieDetails?keyword=" + movieId, true);
+                            }
+                            else if(media_type == "tv"){
+                                xhttp4.open("GET", "https://rongmovieapp.azurewebsites.net/tvDetails?keyword=" + movieId, true);
+                            }
+
+                            // console.log("I am asking for movie id: " + movieId);
+                            xhttp4.send();
+                        };
+                    };
+                    res.appendChild(btn);
+
+                    // var modal = document.createElement("div");
+                    // modal.className = "modal";
+                    // var modalContent = document.createElement("div");
+                    // modalContent.className = "modal-content";
+                    // modal.appendChild(modalContent);
+                    // res.appendChild(modal);
+                    // var span = document.createElement("span"); //<span class="close">&times;</span> 
+                    // span.className = "close";
+                    // span.innerHTML = "&times;";
+                    // modalContent.appendChild(span);
+
+        
+                    // // When the user clicks the button, open the modal 
+                    // btn.onclick = function() {
+                    //     var clickedId = btn.value;
+                        
+
+
+                    // }
+
+                    
+                    
+                    resultSession.appendChild(res);
+                    var br = document.createElement("br");
+                    resultSession.appendChild(br);
+
+                } // end for
+            }
+        }
+
+// When the user clicks on <span> (x), close the modal
+        var span = document.getElementById("span");
+        span.onclick = function() {
+            modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            var modal = document.getElementById("myModal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // function findGenre(m_type, id_arr){ // media_type
+        //     var genres_m;
+        //     // get the genres id and names for movies
+        //     if(m_type == "movie"){
+        //         var x = new XMLHttpRequest();
+        //         x.onreadystatechange = function() {
+        //             if (x.readyState == 4 && x.status == 200) {
+        //                 genres_m = JSON.parse(x.responseText);
+        //                 console.log(genres_m);
+        //             }
+        //         };
+        //         x.open("GET", "http://127.0.0.1:5000/movieGenre", true);
+        //         x.send();
+        //     }
+            
+
+        //     // get the genres id and names for TVs
+        //     else{
+        //         var x2 = new XMLHttpRequest();
+        //         x2.onreadystatechange = function() {
+        //             if (x2.readyState == 4 && x2.status == 200) {
+        //                 genres_m = JSON.parse(x2.responseText);
+        //             }
+        //         };
+        //         x2.open("GET", "http://127.0.0.1:5000/tvGenre", true);
+        //         x2.send();
+        //     }
+            
+        //     console.log(genres_m);
+        //     // console.log(genres_tv);
+
+        //     var genre_array = new Array();
+        //     for(i in id_arr){
+        //         genre_array.push(genres_m[i]);
+        //     }
+        //     var genre_string = genre_array.join(", ");
+        //     return genre_string;
+        // }
+
+        // var genres_m;
+        // var x = new XMLHttpRequest();
+        // x.onreadystatechange = function() {
+        //     if (x.readyState == 4 && x.status == 200) {
+        //         genres_m = JSON.parse(x.responseText);
+        //         console.log(genres_m);
+        //         window.GlobalMyArray = genres_m;
+        //     }
+        //     // return genres_m
+        // };
+        // x.open("GET", "http://127.0.0.1:5000/movieGenre", true);
+        // x.send();
+        // console.log(genres_m);
+        // console.log(window.GlobalMyArray);
+
+
+    </script>
+</body>
+</html>
